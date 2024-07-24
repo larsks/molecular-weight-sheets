@@ -1,6 +1,11 @@
 const re_component = /(\((?<group>.*)\)|(?<element>[A-Z][a-z]?))(?<count>\d*)/g;
 
-function findElement(element) {
+/**
+ * Return the atomic weight (in g/mol) of an element.
+ *
+ * @param {string} element An atomic symbol
+ */
+function findElementWeight(element) {
   console.log("find weight for element " + element);
 
   for(var i = 0; i<elements.length;i++){
@@ -14,6 +19,7 @@ function findElement(element) {
 
 /**
  * Return the molecular weight of the given molecule.
+ *
  * @param {string} molecule A molecular formula, like "H2SO4"
  * @returns {float} molecular weight of the given formula
  */
@@ -35,7 +41,7 @@ function molecularWeight(molecule) {
       weight = molecularWeight(comp.value.groups.group);
     } else {
       name = comp.value.groups.element;
-      weight = findElement(comp.value.groups.element);
+      weight = findElementWeight(comp.value.groups.element);
     }
     total_weight += weight * count;
     console.log("name " + name + " weight " + weight + " count " + count + " scaled " + (weight * count) + " -> total " + total_weight);
