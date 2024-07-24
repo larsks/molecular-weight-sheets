@@ -1,18 +1,11 @@
 const re_component = /(\((?<group>.*)\)|(?<element>[A-Z][a-z]?))(?<count>\d*)/g;
-var elements;
 
 function findElement(element) {
   console.log("find weight for element " + element);
 
-  var sheet = SpreadsheetApp.getActiveSpreadsheet();
-  var ptoe = sheet.getSheetByName("PeriodicTable");
-
-  if (elements === undefined)
-    elements = ptoe.getRange(1, 1, ptoe.getLastRow(), ptoe.getLastColumn()).getValues();
-
   for(var i = 0; i<elements.length;i++){
-    if(elements[i][2] == element){
-      return elements[i][3];
+    if(elements[i]["Symbol"] == element){
+      return elements[i]["Atomic Weight"];
     }
   }
 
