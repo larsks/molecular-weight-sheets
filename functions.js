@@ -1,15 +1,18 @@
-const re_component = /([A-Z][a-z]?)(\d*)/g;
+const re_component = /(\((?<group>.*)\)|(?<element>[A-Z][a-z]?))(?<count>\d*)/g;
+var elements;
 
 function findElement(element) {
+  console.log("find weight for element " + element);
+
   var sheet = SpreadsheetApp.getActiveSpreadsheet();
   var ptoe = sheet.getSheetByName("PeriodicTable");
 
-  var data = ptoe.getRange(1, 1, ptoe.getLastRow(), ptoe.getLastColumn()).getValues();
+  if (elements === undefined)
+    elements = ptoe.getRange(1, 1, ptoe.getLastRow(), ptoe.getLastColumn()).getValues();
 
-  for(var i = 0; i<data.length;i++){
-    //console.log("check that " + element + " == " + data[i][2]);
-    if(data[i][2] == element){
-      return data[i][3];
+  for(var i = 0; i<elements.length;i++){
+    if(elements[i][2] == element){
+      return elements[i][3];
     }
   }
 
@@ -22,16 +25,30 @@ function findElement(element) {
  * @returns {float} molecular weight of the given formula
  */
 function molecularWeight(molecule) {
-  var found = molecule.matchAll(re_component);
   var total_weight = 0;
+  var found = molecule.matchAll(re_component);
+
+  console.log("find weight for molecule " + molecule);
 
   for (let comp = found.next(); !comp.done; comp = found.next()) {
-    weight = findElement(comp.value[1]);
-    count = comp.value[2] ? comp.value[2] : 1;
-    console.log("element " + comp.value[1] + " weight " + weight + " count " + count);
+    var name;
+    var weight;
+    var count;
+
+    //console.log(comp);
+    count = comp.value.groups.count ? comp.value.groups.count : 1;
+    if (comp.value.groups.group) {
+      name = comp.value.groups.group;
+      weight = molecularWeight(comp.value.groups.group);
+    } else {
+      name = comp.value.groups.element;
+      weight = findElement(comp.value.groups.element);
+    }
     total_weight += weight * count;
+    console.log("name " + name + " weight " + weight + " count " + count + " scaled " + (weight * count) + " -> total " + total_weight);
   }
 
+  console.log("weight for " + molecule + " is " + total_weight);
   return total_weight;
 }
 
