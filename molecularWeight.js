@@ -1,5 +1,11 @@
 const re_component = /(\((?<group1>.*)\)|\[(?<group2>.*)\]|(?<element>[A-Z][a-z]?))(?<count>\d*)/g;
 
+console.log(typeof elements);
+if (typeof elements == 'undefined') {
+  elements_mod = require('./elements.js');
+  elements = elements_mod.elements;
+}
+
 /**
  * Return the atomic weight (in g/mol) of an element.
  *
@@ -57,3 +63,6 @@ function molecularWeight(molecule) {
   return total_weight;
 }
 
+if (typeof module !== 'undefined') {
+  module.exports = {molecularWeight};
+}

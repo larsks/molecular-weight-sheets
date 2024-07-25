@@ -945,3 +945,7 @@ const elements = [
     "Density": ""
   }
 ];
+
+if (typeof module !== 'undefined') {
+  module.exports = {elements};
+}
