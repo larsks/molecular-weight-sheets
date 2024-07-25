@@ -1,12 +1,5 @@
 const mw = require('./molecularWeight.js');
 
-const tests = [
-  {
-    formula: "H2O",
-    weight: "18.01528",
-  }
-];
-
 describe('molecularWeight', () => {
   it.each([
     ["H", 1.00],

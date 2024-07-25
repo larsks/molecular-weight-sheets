@@ -1,6 +1,6 @@
 const re_component = /(\((?<group1>.*)\)|\[(?<group2>.*)\]|(?<element>[A-Z][a-z]?))(?<count>\d*)/g;
 
-console.log(typeof elements);
+// This is a workaround to support running tests with node.js
 if (typeof elements == 'undefined') {
   elements_mod = require('./elements.js');
   elements = elements_mod.elements;
@@ -16,9 +16,11 @@ if (typeof elements == 'undefined') {
 function findElementWeight(element) {
   console.log("find weight for element " + element);
 
-  for(var i = 0; i<elements.length;i++){
+  for(i in elements) {
     if(elements[i]["Symbol"] == element){
-      return elements[i]["Atomic Weight"];
+      var weight = elements[i]["Atomic Weight"];
+      console.log("weight for element " + element + " is " + weight);
+      return weight;
     }
   }
 
@@ -33,27 +35,26 @@ function findElementWeight(element) {
  * @customfunction
  */
 function molecularWeight(molecule) {
+  console.log("find weight for molecule " + molecule);
+
   var total_weight = 0;
   var found = molecule.matchAll(re_component);
 
-  console.log("find weight for molecule " + molecule);
-
-  for (let comp = found.next(); !comp.done; comp = found.next()) {
+  for (comp of found) {
     var name;
     var weight;
     var count;
 
-    //console.log(comp);
-    count = comp.value.groups.count ? comp.value.groups.count : 1;
-    if (comp.value.groups.group1) {
-      name = comp.value.groups.group1;
-      weight = molecularWeight(comp.value.groups.group1);
-    } else if (comp.value.groups.group2) {
-      name = comp.value.groups.group2;
-      weight = molecularWeight(comp.value.groups.group2);
+    count = comp.groups.count ? comp.groups.count : 1;
+    if (comp.groups.group1) {
+      name = comp.groups.group1;
+      weight = molecularWeight(comp.groups.group1);
+    } else if (comp.groups.group2) {
+      name = comp.groups.group2;
+      weight = molecularWeight(comp.groups.group2);
     } else {
-      name = comp.value.groups.element;
-      weight = findElementWeight(comp.value.groups.element);
+      name = comp.groups.element;
+      weight = findElementWeight(comp.groups.element);
     }
     total_weight += weight * count;
     console.log("name " + name + " weight " + weight + " count " + count + " scaled " + (weight * count) + " -> total " + total_weight);
@@ -63,6 +64,7 @@ function molecularWeight(molecule) {
   return total_weight;
 }
 
+// This is a workaround to support running tests with node.js
 if (typeof module !== 'undefined') {
   module.exports = {molecularWeight};
 }
