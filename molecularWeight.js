@@ -1,4 +1,4 @@
-const re_component = /(\((?<group>.*)\)|(?<element>[A-Z][a-z]?))(?<count>\d*)/g;
+const re_component = /(\((?<group1>.*)\)|\[(?<group2>.*)\]|(?<element>[A-Z][a-z]?))(?<count>\d*)/g;
 
 /**
  * Return the atomic weight (in g/mol) of an element.
@@ -39,9 +39,12 @@ function molecularWeight(molecule) {
 
     //console.log(comp);
     count = comp.value.groups.count ? comp.value.groups.count : 1;
-    if (comp.value.groups.group) {
-      name = comp.value.groups.group;
-      weight = molecularWeight(comp.value.groups.group);
+    if (comp.value.groups.group1) {
+      name = comp.value.groups.group1;
+      weight = molecularWeight(comp.value.groups.group1);
+    } else if (comp.value.groups.group2) {
+      name = comp.value.groups.group2;
+      weight = molecularWeight(comp.value.groups.group2);
     } else {
       name = comp.value.groups.element;
       weight = findElementWeight(comp.value.groups.element);
