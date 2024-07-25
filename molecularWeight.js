@@ -14,12 +14,12 @@ if (typeof elements == 'undefined') {
  * @customfunction
  */
 function findElementWeight(element) {
-  console.log("find weight for element " + element);
+  //console.log("find weight for element " + element);
 
   for(i in elements) {
     if(elements[i]["Symbol"] == element){
       var weight = elements[i]["Atomic Weight"];
-      console.log("weight for element " + element + " is " + weight);
+      //console.log("weight for element " + element + " is " + weight);
       return weight;
     }
   }
@@ -35,7 +35,7 @@ function findElementWeight(element) {
  * @customfunction
  */
 function molecularWeight(molecule) {
-  console.log("find weight for molecule " + molecule);
+  //console.log("find weight for molecule " + molecule);
 
   var total_weight = 0;
   var found = molecule.matchAll(re_component);
@@ -57,10 +57,10 @@ function molecularWeight(molecule) {
       weight = findElementWeight(comp.groups.element);
     }
     total_weight += weight * count;
-    console.log("name " + name + " weight " + weight + " count " + count + " scaled " + (weight * count) + " -> total " + total_weight);
+    //console.log("name " + name + " weight " + weight + " count " + count + " scaled " + (weight * count) + " -> total " + total_weight);
   }
 
-  console.log("weight for " + molecule + " is " + total_weight);
+  //console.log("weight for " + molecule + " is " + total_weight);
   return total_weight;
 }
 
